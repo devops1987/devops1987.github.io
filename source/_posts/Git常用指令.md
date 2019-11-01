@@ -1,5 +1,7 @@
 ---
 title: Git常用指令
+date: 2019/10/31
+updated: 2019/10/31
 author: qfxl
 catalog: true
 tags:
