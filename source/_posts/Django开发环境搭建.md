@@ -1,7 +1,6 @@
 ---
 title: Django开发环境搭建
 date: 2019/11/1
-updated: 2019/11/1
 author: qfxl
 catalog: true
 tags:
