@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="整理一些自用的Git指令 GitHub创建仓库提示代码123456$ echo &quot;# 项目名&quot; &amp;gt;&amp;gt; README.md$ git init$ git add README.md$ git commit -m &quot;first commit&quot;$ git remote add origin git@github.com:invoker&#x2F;项目名.git$ git push -u origin">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git常用指令">
+<meta property="og:url" content="http:&#x2F;&#x2F;devops1987.github.io&#x2F;2019&#x2F;10&#x2F;31&#x2F;Git%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4&#x2F;index.html">
+<meta property="og:site_name" content="清风徐来">
+<meta property="og:description" content="整理一些自用的Git指令 GitHub创建仓库提示代码123456$ echo &quot;# 项目名&quot; &amp;gt;&amp;gt; README.md$ git init$ git add README.md$ git commit -m &quot;first commit&quot;$ git remote add origin git@github.com:invoker&#x2F;项目名.git$ git push -u origin">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-01T13:24:53.012Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://devops1987.github.io/2019/10/31/Git%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Git常用指令 | 清风徐来</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">清风徐来</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://devops1987.github.io/2019/10/31/Git%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/time.png">
+      <meta itemprop="name" content="清风徐来">
+      <meta itemprop="description" content="A journey of a thousand miles begins with a single step.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="清风徐来">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git常用指令
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-31 00:00:00" itemprop="dateCreated datePublished" datetime="2019-10-31T00:00:00+08:00">2019-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-01 21:24:53" itemprop="dateModified" datetime="2019-11-01T21:24:53+08:00">2019-11-01</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>整理一些自用的Git指令</p>
+</blockquote><h1 id="GitHub创建仓库提示代码"><a href="#GitHub创建仓库提示代码" class="headerlink" title="GitHub创建仓库提示代码"></a>GitHub创建仓库提示代码</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">"# 项目名"</span> &gt;&gt; README.md</span><br><span class="line">$ git init</span><br><span class="line">$ git add README.md</span><br><span class="line">$ git commit -m <span class="string">"first commit"</span></span><br><span class="line">$ git remote add origin git@github.com:invoker/项目名.git</span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<p>若仓库存在直接push</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin git@github.com:invoker/test.git</span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<h1 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h1><h2 id="创建仓库（初始化）"><a href="#创建仓库（初始化）" class="headerlink" title="创建仓库（初始化）"></a>创建仓库（初始化）</h2><p>在当前指定目录下创建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure>
+
+<p>新建一个仓库目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init [project-name]</span><br></pre></td></tr></table></figure>
+
+<p>克隆一个远程项目</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> [url]</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加文件到缓存区"><a href="#添加文件到缓存区" class="headerlink" title="添加文件到缓存区"></a>添加文件到缓存区</h2><p>添加所有变化的文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add .   or $ git add -A</span><br></pre></td></tr></table></figure>
+
+<p>添加名称指定文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add text.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>设置提交代码时的用户信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config [--global] user.name <span class="string">"[name]"</span></span><br><span class="line">$ git config [--global] user.email <span class="string">"[email address]"</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h2><p>提交暂存区到仓库区</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -m <span class="string">"msg"</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="提交暂存区的指定文件到仓库区"><a href="#提交暂存区的指定文件到仓库区" class="headerlink" title="提交暂存区的指定文件到仓库区"></a>提交暂存区的指定文件到仓库区</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit [file1] [file2] ... -m [message]</span><br></pre></td></tr></table></figure>
+
+<h2 id="提交工作区自上次commit之后的变化，直接到仓库区"><a href="#提交工作区自上次commit之后的变化，直接到仓库区" class="headerlink" title="提交工作区自上次commit之后的变化，直接到仓库区"></a>提交工作区自上次commit之后的变化，直接到仓库区</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -a</span><br></pre></td></tr></table></figure>
+
+<h2 id="提交时显示所有diff信息"><a href="#提交时显示所有diff信息" class="headerlink" title="提交时显示所有diff信息"></a>提交时显示所有diff信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -v</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用一次新的commit，替代上一次提交"><a href="#使用一次新的commit，替代上一次提交" class="headerlink" title="使用一次新的commit，替代上一次提交"></a>使用一次新的commit，替代上一次提交</h2><blockquote>
+<p>如果代码没有任何新变化，则用来改写上一次commit的提交信息</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit --amend -m [message]</span><br></pre></td></tr></table></figure>
+
+<h2 id="重做上一次commit，并包括指定文件的新变化"><a href="#重做上一次commit，并包括指定文件的新变化" class="headerlink" title="重做上一次commit，并包括指定文件的新变化"></a>重做上一次commit，并包括指定文件的新变化</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit --amend [file1] [file2] ...</span><br></pre></td></tr></table></figure>
+
+<h1 id="远程同步"><a href="#远程同步" class="headerlink" title="远程同步"></a>远程同步</h1><h2 id="下载远程仓库的所有变动"><a href="#下载远程仓库的所有变动" class="headerlink" title="下载远程仓库的所有变动"></a>下载远程仓库的所有变动</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git fetch [remote]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示所有远程仓库"><a href="#显示所有远程仓库" class="headerlink" title="显示所有远程仓库"></a>显示所有远程仓库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某个远程仓库的信息"><a href="#显示某个远程仓库的信息" class="headerlink" title="显示某个远程仓库的信息"></a>显示某个远程仓库的信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote show [remote]</span><br></pre></td></tr></table></figure>
+
+<h2 id="增加一个新的远程仓库，并命名"><a href="#增加一个新的远程仓库，并命名" class="headerlink" title="增加一个新的远程仓库，并命名"></a>增加一个新的远程仓库，并命名</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add [shortname] [url]</span><br></pre></td></tr></table></figure>
+
+<h2 id="取回远程仓库的变化，并与本地分支合并"><a href="#取回远程仓库的变化，并与本地分支合并" class="headerlink" title="取回远程仓库的变化，并与本地分支合并"></a>取回远程仓库的变化，并与本地分支合并</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git pull [remote] [branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="上传本地指定分支到远程仓库"><a href="#上传本地指定分支到远程仓库" class="headerlink" title="上传本地指定分支到远程仓库"></a>上传本地指定分支到远程仓库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push [remote] [branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="强行推送当前分支到远程仓库，即使有冲突"><a href="#强行推送当前分支到远程仓库，即使有冲突" class="headerlink" title="强行推送当前分支到远程仓库，即使有冲突"></a>强行推送当前分支到远程仓库，即使有冲突</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push [remote] --force</span><br></pre></td></tr></table></figure>
+
+<h2 id="推送所有分支到远程仓库"><a href="#推送所有分支到远程仓库" class="headerlink" title="推送所有分支到远程仓库"></a>推送所有分支到远程仓库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push [remote] --all</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h1><h2 id="列出所有本地分支"><a href="#列出所有本地分支" class="headerlink" title="列出所有本地分支"></a>列出所有本地分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch</span><br></pre></td></tr></table></figure>
+
+<h2 id="列出所有远程分支"><a href="#列出所有远程分支" class="headerlink" title="列出所有远程分支"></a>列出所有远程分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -r</span><br></pre></td></tr></table></figure>
+
+<h2 id="列出所有本地分支和远程分支"><a href="#列出所有本地分支和远程分支" class="headerlink" title="列出所有本地分支和远程分支"></a>列出所有本地分支和远程分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -a</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个分支，但依然停留在当前分支"><a href="#新建一个分支，但依然停留在当前分支" class="headerlink" title="新建一个分支，但依然停留在当前分支"></a>新建一个分支，但依然停留在当前分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch [branch-name]</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个分支，并切换到该分支"><a href="#新建一个分支，并切换到该分支" class="headerlink" title="新建一个分支，并切换到该分支"></a>新建一个分支，并切换到该分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b [branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个分支，指向指定commit"><a href="#新建一个分支，指向指定commit" class="headerlink" title="新建一个分支，指向指定commit"></a>新建一个分支，指向指定commit</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch [branch] [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个分支，与指定的远程分支建立追踪关系"><a href="#新建一个分支，与指定的远程分支建立追踪关系" class="headerlink" title="新建一个分支，与指定的远程分支建立追踪关系"></a>新建一个分支，与指定的远程分支建立追踪关系</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch --track [branch] [remote-branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="切换到指定分支，并更新工作区"><a href="#切换到指定分支，并更新工作区" class="headerlink" title="切换到指定分支，并更新工作区"></a>切换到指定分支，并更新工作区</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout [branch-name]</span><br></pre></td></tr></table></figure>
+
+<h2 id="切换到上一个分支"><a href="#切换到上一个分支" class="headerlink" title="切换到上一个分支"></a>切换到上一个分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -</span><br></pre></td></tr></table></figure>
+
+<h2 id="建立追踪关系，在现有分支与指定的远程分支之间"><a href="#建立追踪关系，在现有分支与指定的远程分支之间" class="headerlink" title="建立追踪关系，在现有分支与指定的远程分支之间"></a>建立追踪关系，在现有分支与指定的远程分支之间</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch --<span class="built_in">set</span>-upstream [branch] [remote-branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="合并指定分支到当前分支"><a href="#合并指定分支到当前分支" class="headerlink" title="合并指定分支到当前分支"></a>合并指定分支到当前分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git merge [branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="选择一个commit，合并进当前分支"><a href="#选择一个commit，合并进当前分支" class="headerlink" title="选择一个commit，合并进当前分支"></a>选择一个commit，合并进当前分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git cherry-pick [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d [branch-name]</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除远程分支"><a href="#删除远程分支" class="headerlink" title="删除远程分支"></a>删除远程分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin --delete [branch-name]</span><br><span class="line">$ git branch -dr [remote/branch]</span><br></pre></td></tr></table></figure>
+
+<h1 id="标签Tags"><a href="#标签Tags" class="headerlink" title="标签Tags"></a>标签Tags</h1><p>添加标签 在当前commit</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -a v1.0 -m <span class="string">'xxx'</span></span><br></pre></td></tr></table></figure>
+
+<p>添加标签 在指定commit</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag v1.0 [commit]</span><br></pre></td></tr></table></figure>
+
+<p>查看</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag</span><br></pre></td></tr></table></figure>
+
+<p>删除</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -d V1.0</span><br></pre></td></tr></table></figure>
+
+<p>删除远程tag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin :refs/tags/[tagName]</span><br></pre></td></tr></table></figure>
+
+<p>推送</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin --tags</span><br></pre></td></tr></table></figure>
+
+<p>拉取</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git fetch origin tag V1.0</span><br></pre></td></tr></table></figure>
+
+<p>新建一个分支，指向某个tag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b [branch] [tag]</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看信息"><a href="#查看信息" class="headerlink" title="查看信息"></a>查看信息</h1><h2 id="显示有变更的文件"><a href="#显示有变更的文件" class="headerlink" title="显示有变更的文件"></a>显示有变更的文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示当前分支的版本历史"><a href="#显示当前分支的版本历史" class="headerlink" title="显示当前分支的版本历史"></a>显示当前分支的版本历史</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="显示commit历史，以及每次commit发生变更的文件"><a href="#显示commit历史，以及每次commit发生变更的文件" class="headerlink" title="显示commit历史，以及每次commit发生变更的文件"></a>显示commit历史，以及每次commit发生变更的文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --<span class="built_in">stat</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="搜索提交历史，根据关键词"><a href="#搜索提交历史，根据关键词" class="headerlink" title="搜索提交历史，根据关键词"></a>搜索提交历史，根据关键词</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> -S [keyword]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某个commit之后的所有变动，每个commit占据一行"><a href="#显示某个commit之后的所有变动，每个commit占据一行" class="headerlink" title="显示某个commit之后的所有变动，每个commit占据一行"></a>显示某个commit之后的所有变动，每个commit占据一行</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> [tag] HEAD --pretty=format:%s</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件"><a href="#显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件" class="headerlink" title="显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件"></a>显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> [tag] HEAD --grep feature</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某个文件的版本历史，包括文件改名"><a href="#显示某个文件的版本历史，包括文件改名" class="headerlink" title="显示某个文件的版本历史，包括文件改名"></a>显示某个文件的版本历史，包括文件改名</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --follow [file]</span><br><span class="line">$ git whatchanged [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示指定文件相关的每一次diff"><a href="#显示指定文件相关的每一次diff" class="headerlink" title="显示指定文件相关的每一次diff"></a>显示指定文件相关的每一次diff</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> -p [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示过去5次提交"><a href="#显示过去5次提交" class="headerlink" title="显示过去5次提交"></a>显示过去5次提交</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> -5 --pretty --oneline</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示所有提交过的用户，按提交次数排序"><a href="#显示所有提交过的用户，按提交次数排序" class="headerlink" title="显示所有提交过的用户，按提交次数排序"></a>显示所有提交过的用户，按提交次数排序</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git shortlog -sn</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示指定文件是什么人在什么时间修改过"><a href="#显示指定文件是什么人在什么时间修改过" class="headerlink" title="显示指定文件是什么人在什么时间修改过"></a>显示指定文件是什么人在什么时间修改过</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git blame [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示暂存区和工作区的差异"><a href="#显示暂存区和工作区的差异" class="headerlink" title="显示暂存区和工作区的差异"></a>显示暂存区和工作区的差异</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git diff</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示暂存区和上一个commit的差异"><a href="#显示暂存区和上一个commit的差异" class="headerlink" title="显示暂存区和上一个commit的差异"></a>显示暂存区和上一个commit的差异</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git diff --cached [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示工作区与当前分支最新commit之间的差异"><a href="#显示工作区与当前分支最新commit之间的差异" class="headerlink" title="显示工作区与当前分支最新commit之间的差异"></a>显示工作区与当前分支最新commit之间的差异</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git diff HEAD</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示两次提交之间的差异"><a href="#显示两次提交之间的差异" class="headerlink" title="显示两次提交之间的差异"></a>显示两次提交之间的差异</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git diff [first-branch]...[second-branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示今天你写了多少行代码"><a href="#显示今天你写了多少行代码" class="headerlink" title="显示今天你写了多少行代码"></a>显示今天你写了多少行代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git diff --shortstat <span class="string">"@&#123;0 day ago&#125;"</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某次提交的元数据和内容变化"><a href="#显示某次提交的元数据和内容变化" class="headerlink" title="显示某次提交的元数据和内容变化"></a>显示某次提交的元数据和内容变化</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git show [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某次提交发生变化的文件"><a href="#显示某次提交发生变化的文件" class="headerlink" title="显示某次提交发生变化的文件"></a>显示某次提交发生变化的文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git show --name-only [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某次提交时，某个文件的内容"><a href="#显示某次提交时，某个文件的内容" class="headerlink" title="显示某次提交时，某个文件的内容"></a>显示某次提交时，某个文件的内容</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git show [commit]:[filename]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示当前分支的最近几次提交"><a href="#显示当前分支的最近几次提交" class="headerlink" title="显示当前分支的最近几次提交"></a>显示当前分支的最近几次提交</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reflog</span><br></pre></td></tr></table></figure>
+
+<h1 id="撤销"><a href="#撤销" class="headerlink" title="撤销"></a>撤销</h1><h2 id="恢复暂存区的指定文件到工作区"><a href="#恢复暂存区的指定文件到工作区" class="headerlink" title="恢复暂存区的指定文件到工作区"></a>恢复暂存区的指定文件到工作区</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="恢复某个commit的指定文件到暂存区和工作区"><a href="#恢复某个commit的指定文件到暂存区和工作区" class="headerlink" title="恢复某个commit的指定文件到暂存区和工作区"></a>恢复某个commit的指定文件到暂存区和工作区</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout [commit] [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="恢复暂存区的所有文件到工作区"><a href="#恢复暂存区的所有文件到工作区" class="headerlink" title="恢复暂存区的所有文件到工作区"></a>恢复暂存区的所有文件到工作区</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout .</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置暂存区的指定文件，与上一次commit保持一致，但工作区不变"><a href="#重置暂存区的指定文件，与上一次commit保持一致，但工作区不变" class="headerlink" title="重置暂存区的指定文件，与上一次commit保持一致，但工作区不变"></a>重置暂存区的指定文件，与上一次commit保持一致，但工作区不变</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置暂存区与工作区，与上一次commit保持一致"><a href="#重置暂存区与工作区，与上一次commit保持一致" class="headerlink" title="重置暂存区与工作区，与上一次commit保持一致"></a>重置暂存区与工作区，与上一次commit保持一致</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset --hard</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变"><a href="#重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变" class="headerlink" title="重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变"></a>重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致"><a href="#重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致" class="headerlink" title="重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致"></a>重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset --hard [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置当前HEAD为指定commit，但保持暂存区和工作区不变"><a href="#重置当前HEAD为指定commit，但保持暂存区和工作区不变" class="headerlink" title="重置当前HEAD为指定commit，但保持暂存区和工作区不变"></a>重置当前HEAD为指定commit，但保持暂存区和工作区不变</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset --keep [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个commit，用来撤销指定commit"><a href="#新建一个commit，用来撤销指定commit" class="headerlink" title="新建一个commit，用来撤销指定commit"></a>新建一个commit，用来撤销指定commit</h2><blockquote>
+<p>后者的所有变化都将被前者抵消，并且应用到当前分支</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git revert [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="暂时将未提交的变化移除，稍后再移入"><a href="#暂时将未提交的变化移除，稍后再移入" class="headerlink" title="暂时将未提交的变化移除，稍后再移入"></a>暂时将未提交的变化移除，稍后再移入</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git stash</span><br><span class="line">$ git stash pop</span><br></pre></td></tr></table></figure>
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="生成一个可供发布的压缩包"><a href="#生成一个可供发布的压缩包" class="headerlink" title="生成一个可供发布的压缩包"></a>生成一个可供发布的压缩包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git archives</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/30/hello-world/" rel="next" title="Hello World">
+                  <i class="fa fa-chevron-left"></i> Hello World
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/01/Kafka%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/" rel="prev" title="Kafka常用操作记录">
+                  Kafka常用操作记录 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GitHub创建仓库提示代码"><span class="nav-number">1.</span> <span class="nav-text">GitHub创建仓库提示代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用操作"><span class="nav-number">2.</span> <span class="nav-text">常用操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建仓库（初始化）"><span class="nav-number">2.1.</span> <span class="nav-text">创建仓库（初始化）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加文件到缓存区"><span class="nav-number">2.2.</span> <span class="nav-text">添加文件到缓存区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交"><span class="nav-number">2.4.</span> <span class="nav-text">提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交暂存区的指定文件到仓库区"><span class="nav-number">2.5.</span> <span class="nav-text">提交暂存区的指定文件到仓库区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交工作区自上次commit之后的变化，直接到仓库区"><span class="nav-number">2.6.</span> <span class="nav-text">提交工作区自上次commit之后的变化，直接到仓库区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交时显示所有diff信息"><span class="nav-number">2.7.</span> <span class="nav-text">提交时显示所有diff信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用一次新的commit，替代上一次提交"><span class="nav-number">2.8.</span> <span class="nav-text">使用一次新的commit，替代上一次提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重做上一次commit，并包括指定文件的新变化"><span class="nav-number">2.9.</span> <span class="nav-text">重做上一次commit，并包括指定文件的新变化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#远程同步"><span class="nav-number">3.</span> <span class="nav-text">远程同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载远程仓库的所有变动"><span class="nav-number">3.1.</span> <span class="nav-text">下载远程仓库的所有变动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示所有远程仓库"><span class="nav-number">3.2.</span> <span class="nav-text">显示所有远程仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示某个远程仓库的信息"><span class="nav-number">3.3.</span> <span class="nav-text">显示某个远程仓库的信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增加一个新的远程仓库，并命名"><span class="nav-number">3.4.</span> <span class="nav-text">增加一个新的远程仓库，并命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取回远程仓库的变化，并与本地分支合并"><span class="nav-number">3.5.</span> <span class="nav-text">取回远程仓库的变化，并与本地分支合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上传本地指定分支到远程仓库"><span class="nav-number">3.6.</span> <span class="nav-text">上传本地指定分支到远程仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强行推送当前分支到远程仓库，即使有冲突"><span class="nav-number">3.7.</span> <span class="nav-text">强行推送当前分支到远程仓库，即使有冲突</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推送所有分支到远程仓库"><span class="nav-number">3.8.</span> <span class="nav-text">推送所有分支到远程仓库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支"><span class="nav-number">4.</span> <span class="nav-text">分支</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#列出所有本地分支"><span class="nav-number">4.1.</span> <span class="nav-text">列出所有本地分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列出所有远程分支"><span class="nav-number">4.2.</span> <span class="nav-text">列出所有远程分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列出所有本地分支和远程分支"><span class="nav-number">4.3.</span> <span class="nav-text">列出所有本地分支和远程分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建一个分支，但依然停留在当前分支"><span class="nav-number">4.4.</span> <span class="nav-text">新建一个分支，但依然停留在当前分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建一个分支，并切换到该分支"><span class="nav-number">4.5.</span> <span class="nav-text">新建一个分支，并切换到该分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建一个分支，指向指定commit"><span class="nav-number">4.6.</span> <span class="nav-text">新建一个分支，指向指定commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建一个分支，与指定的远程分支建立追踪关系"><span class="nav-number">4.7.</span> <span class="nav-text">新建一个分支，与指定的远程分支建立追踪关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切换到指定分支，并更新工作区"><span class="nav-number">4.8.</span> <span class="nav-text">切换到指定分支，并更新工作区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切换到上一个分支"><span class="nav-number">4.9.</span> <span class="nav-text">切换到上一个分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立追踪关系，在现有分支与指定的远程分支之间"><span class="nav-number">4.10.</span> <span class="nav-text">建立追踪关系，在现有分支与指定的远程分支之间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并指定分支到当前分支"><span class="nav-number">4.11.</span> <span class="nav-text">合并指定分支到当前分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择一个commit，合并进当前分支"><span class="nav-number">4.12.</span> <span class="nav-text">选择一个commit，合并进当前分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除分支"><span class="nav-number">4.13.</span> <span class="nav-text">删除分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除远程分支"><span class="nav-number">4.14.</span> <span class="nav-text">删除远程分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标签Tags"><span class="nav-number">5.</span> <span class="nav-text">标签Tags</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看信息"><span class="nav-number">6.</span> <span class="nav-text">查看信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#显示有变更的文件"><span class="nav-number">6.1.</span> <span class="nav-text">显示有变更的文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示当前分支的版本历史"><span class="nav-number">6.2.</span> <span class="nav-text">显示当前分支的版本历史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示commit历史，以及每次commit发生变更的文件"><span class="nav-number">6.3.</span> <span class="nav-text">显示commit历史，以及每次commit发生变更的文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索提交历史，根据关键词"><span class="nav-number">6.4.</span> <span class="nav-text">搜索提交历史，根据关键词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示某个commit之后的所有变动，每个commit占据一行"><span class="nav-number">6.5.</span> <span class="nav-text">显示某个commit之后的所有变动，每个commit占据一行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件"><span class="nav-number">6.6.</span> <span class="nav-text">显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示某个文件的版本历史，包括文件改名"><span class="nav-number">6.7.</span> <span class="nav-text">显示某个文件的版本历史，包括文件改名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示指定文件相关的每一次diff"><span class="nav-number">6.8.</span> <span class="nav-text">显示指定文件相关的每一次diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示过去5次提交"><span class="nav-number">6.9.</span> <span class="nav-text">显示过去5次提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示所有提交过的用户，按提交次数排序"><span class="nav-number">6.10.</span> <span class="nav-text">显示所有提交过的用户，按提交次数排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示指定文件是什么人在什么时间修改过"><span class="nav-number">6.11.</span> <span class="nav-text">显示指定文件是什么人在什么时间修改过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示暂存区和工作区的差异"><span class="nav-number">6.12.</span> <span class="nav-text">显示暂存区和工作区的差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示暂存区和上一个commit的差异"><span class="nav-number">6.13.</span> <span class="nav-text">显示暂存区和上一个commit的差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示工作区与当前分支最新commit之间的差异"><span class="nav-number">6.14.</span> <span class="nav-text">显示工作区与当前分支最新commit之间的差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示两次提交之间的差异"><span class="nav-number">6.15.</span> <span class="nav-text">显示两次提交之间的差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示今天你写了多少行代码"><span class="nav-number">6.16.</span> <span class="nav-text">显示今天你写了多少行代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示某次提交的元数据和内容变化"><span class="nav-number">6.17.</span> <span class="nav-text">显示某次提交的元数据和内容变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示某次提交发生变化的文件"><span class="nav-number">6.18.</span> <span class="nav-text">显示某次提交发生变化的文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示某次提交时，某个文件的内容"><span class="nav-number">6.19.</span> <span class="nav-text">显示某次提交时，某个文件的内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示当前分支的最近几次提交"><span class="nav-number">6.20.</span> <span class="nav-text">显示当前分支的最近几次提交</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#撤销"><span class="nav-number">7.</span> <span class="nav-text">撤销</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#恢复暂存区的指定文件到工作区"><span class="nav-number">7.1.</span> <span class="nav-text">恢复暂存区的指定文件到工作区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#恢复某个commit的指定文件到暂存区和工作区"><span class="nav-number">7.2.</span> <span class="nav-text">恢复某个commit的指定文件到暂存区和工作区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#恢复暂存区的所有文件到工作区"><span class="nav-number">7.3.</span> <span class="nav-text">恢复暂存区的所有文件到工作区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重置暂存区的指定文件，与上一次commit保持一致，但工作区不变"><span class="nav-number">7.4.</span> <span class="nav-text">重置暂存区的指定文件，与上一次commit保持一致，但工作区不变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重置暂存区与工作区，与上一次commit保持一致"><span class="nav-number">7.5.</span> <span class="nav-text">重置暂存区与工作区，与上一次commit保持一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变"><span class="nav-number">7.6.</span> <span class="nav-text">重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致"><span class="nav-number">7.7.</span> <span class="nav-text">重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重置当前HEAD为指定commit，但保持暂存区和工作区不变"><span class="nav-number">7.8.</span> <span class="nav-text">重置当前HEAD为指定commit，但保持暂存区和工作区不变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建一个commit，用来撤销指定commit"><span class="nav-number">7.9.</span> <span class="nav-text">新建一个commit，用来撤销指定commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#暂时将未提交的变化移除，稍后再移入"><span class="nav-number">7.10.</span> <span class="nav-text">暂时将未提交的变化移除，稍后再移入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">8.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成一个可供发布的压缩包"><span class="nav-number">8.1.</span> <span class="nav-text">生成一个可供发布的压缩包</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="清风徐来"
+    src="/images/time.png">
+  <p class="site-author-name" itemprop="name">清风徐来</p>
+  <div class="site-description" itemprop="description">A journey of a thousand miles begins with a single step.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/devops1987" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;devops1987" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:devops19870724@outlook.com" title="E-Mail &amp;rarr; mailto:devops19870724@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://example.com/" title="http:&#x2F;&#x2F;example.com" rel="noopener" target="_blank">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">清风徐来</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">7k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '9e881c8dd74bff41685e',
+      clientSecret: '255af628c808f92005116ae9074058e7332abca6',
+      repo: 'devops1987.github.io',
+      owner: 'devops1987',
+      admin: ['devops1987'],
+      id: '87660a895adf8a918ec985c6f0538236',
+        language: 'zh-CN',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="记录kafka日常操作，持续更新。 启动kafka123# &#x2F;opt&#x2F;kafka&#x2F;bin&#x2F;kafka-server-start.sh &#x2F;opt&#x2F;kafka&#x2F;config&#x2F;server.properties &amp;amp;或者（以守护进程的方式启动）：# &#x2F;opt&#x2F;kafka&#x2F;bin&#x2F;kafka-server-start.sh -daemon &#x2F;opt&#x2F;kafka&#x2F;config&#x2F;server.prop">
+<meta name="keywords" content="Kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka常用操作记录">
+<meta property="og:url" content="http:&#x2F;&#x2F;devops1987.github.io&#x2F;2019&#x2F;11&#x2F;01&#x2F;Kafka%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95&#x2F;index.html">
+<meta property="og:site_name" content="清风徐来">
+<meta property="og:description" content="记录kafka日常操作，持续更新。 启动kafka123# &#x2F;opt&#x2F;kafka&#x2F;bin&#x2F;kafka-server-start.sh &#x2F;opt&#x2F;kafka&#x2F;config&#x2F;server.properties &amp;amp;或者（以守护进程的方式启动）：# &#x2F;opt&#x2F;kafka&#x2F;bin&#x2F;kafka-server-start.sh -daemon &#x2F;opt&#x2F;kafka&#x2F;config&#x2F;server.prop">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-01T13:24:53.200Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://devops1987.github.io/2019/11/01/Kafka%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Kafka常用操作记录 | 清风徐来</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">清风徐来</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://devops1987.github.io/2019/11/01/Kafka%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/time.png">
+      <meta itemprop="name" content="清风徐来">
+      <meta itemprop="description" content="A journey of a thousand miles begins with a single step.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="清风徐来">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kafka常用操作记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-01 00:00:00 / 修改时间：21:24:53" itemprop="dateCreated datePublished" datetime="2019-11-01T00:00:00+08:00">2019-11-01</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>记录kafka日常操作，持续更新。</p>
+</blockquote><h1 id="启动kafka"><a href="#启动kafka" class="headerlink" title="启动kafka"></a>启动kafka</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> /opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties &amp;</span></span><br><span class="line">或者（以守护进程的方式启动）：</span><br><span class="line"><span class="meta">#</span><span class="bash"> /opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/server.properties</span></span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<h1 id="kafka常用命令"><a href="#kafka常用命令" class="headerlink" title="kafka常用命令"></a>kafka常用命令</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cd /opt/kafka</span></span><br><span class="line">列出所有topic</span><br><span class="line"><span class="comment"># bin/kafka-topics.sh --zookeeper 192.168.98.53:2181 --list</span></span><br><span class="line">查看某个topic详情</span><br><span class="line"><span class="comment"># bin/kafka-topics.sh --zookeeper 192.168.98.53:2181 --describe --topic metric</span></span><br><span class="line">修改topic分区大小</span><br><span class="line"><span class="comment"># bin/kafka-topics.sh --zookeeper 192.168.98.53:2181 --alter --topic TransactionTopic --partitions 16</span></span><br><span class="line">查看所有groups</span><br><span class="line"><span class="comment"># bin/kafka-consumer-groups.sh --bootstrap-server 192.168.98.28:9092 --list</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：列出集群里的所有主题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /opt/kafka/bin/kafka-topics.sh --zookeeper localhost:2181 --list</span></span><br></pre></td></tr></table></figure>
+
+<p>怎么知道每个节点的信息呢？运行“”describe topics”命令就可以了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /opt/kafka/bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic</span></span><br></pre></td></tr></table></figure>
+<p>下面解释一下这些输出。第一行是对所有分区的一个描述，然后每个分区都会对应一行，因为我们只有一个分区所以下面就只加了一行。<br>leader：负责处理消息的读和写，leader是从所有节点中随机选择的。<br>replicas：列出了所有的副本节点，不管节点是否在服务中。<br>isr：是正在服务中的节点。</p>
+<h2 id="查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据"><a href="#查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据" class="headerlink" title="查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据"></a>查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bin/kafka-consumer-groups.sh --bootstrap-server 192.168.98.28:9092 --describe --group hoa-server_event|column -t</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其中依次展示group名称、消费的topic名称、partition id、consumer group最后一次提交的offset、最后提交的生产消息offset、消费offset与生产offset之间的差值、当前消费topic-partition的group成员id(不一定包含hostname)</p>
+</blockquote>
+<h2 id="手动设置kafka-logs日志存储时间，删除积压topic数据"><a href="#手动设置kafka-logs日志存储时间，删除积压topic数据" class="headerlink" title="手动设置kafka-logs日志存储时间，删除积压topic数据"></a>手动设置kafka-logs日志存储时间，删除积压topic数据</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kafka-configs.sh --zookeeper 192.168.98.53:2181 --alter --entity-name hoa-server --entity-type topics --add-config retention.ms=5000     //5s</span></span><br><span class="line"><span class="comment"># kafka-configs.sh --zookeeper 192.168.98.53:2181 --alter --entity-name hoa-server --entity-type topics --add-config retention.ms=604800000      //168h，恢复为配置文件中设置</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 –topics-with-overrides 参数可以找出所有包含覆盖配置的主题，它只会列出包含了与集群不一样配置的主题。<br>有两个参数可用于找出有问题的分区。使用 –under-replicated-partitions 参数可以列出所有包含不同步副本的分区 。 使用 –unavailable-partitions 参数可以列出所有没有首领的分区，这些分区已经处于离线状态，对于生产者和消费者来说是不可用的 。<br><strong>示例</strong> ：列出包含不同步副本的分区。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /opt/kafka/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --under-replicated-partitions</span></span><br><span class="line"><span class="comment"># /opt/kafka/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --unavailable-partitions</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="重点概念"><a href="#重点概念" class="headerlink" title="重点概念"></a>重点概念</h1><h2 id="分区平衡"><a href="#分区平衡" class="headerlink" title="分区平衡"></a>分区平衡</h2><p>在讲分区平衡前，先讲几个概念：<br>AR： assigned replicas，已分配的副本。每个partition都有自己的AR列表，里面存储着这个partition最初分配的所有replica。注意AR列表不会变化，除非增加分区。<br>PR（优先replica）：AR列表中的第一个replica就是优先replica，而且永远是优先replica。最初，优先replica和leader replica是同一个replica。<br>ISR：in sync replicas，同步副本。每个partition都有自己的ISR列表。ISR是会根据同步情况动态变化的。</p>
+<p>最初ISR列表和AR列表是一致的，但由于某个节点死掉，或者某个节点的follower replica落后leader replica太多，那么该节点就会被从ISR列表中移除。此时，ISR和AR就不再一致。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/31/Git%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" rel="next" title="Git常用指令">
+                  <i class="fa fa-chevron-left"></i> Git常用指令
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/01/Django%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="prev" title="Django开发环境搭建">
+                  Django开发环境搭建 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#启动kafka"><span class="nav-number">1.</span> <span class="nav-text">启动kafka</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kafka常用命令"><span class="nav-number">2.</span> <span class="nav-text">kafka常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据"><span class="nav-number">2.1.</span> <span class="nav-text">查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手动设置kafka-logs日志存储时间，删除积压topic数据"><span class="nav-number">2.2.</span> <span class="nav-text">手动设置kafka-logs日志存储时间，删除积压topic数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重点概念"><span class="nav-number">3.</span> <span class="nav-text">重点概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分区平衡"><span class="nav-number">3.1.</span> <span class="nav-text">分区平衡</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="清风徐来"
+    src="/images/time.png">
+  <p class="site-author-name" itemprop="name">清风徐来</p>
+  <div class="site-description" itemprop="description">A journey of a thousand miles begins with a single step.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/devops1987" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;devops1987" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:devops19870724@outlook.com" title="E-Mail &amp;rarr; mailto:devops19870724@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://example.com/" title="http:&#x2F;&#x2F;example.com" rel="noopener" target="_blank">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">清风徐来</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">7k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '9e881c8dd74bff41685e',
+      clientSecret: '255af628c808f92005116ae9074058e7332abca6',
+      repo: 'devops1987.github.io',
+      owner: 'devops1987',
+      admin: ['devops1987'],
+      id: '2087886e894b2016cebd56e624a3f8f2',
+        language: 'zh-CN',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

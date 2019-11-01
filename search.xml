@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Django开发环境搭建</title>
+    <url>/2019/11/01/Django%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><h2 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h2><h3 id="pyenv安装与使用"><a href="#pyenv安装与使用" class="headerlink" title="pyenv安装与使用"></a>pyenv安装与使用</h3><p>任意切换python版本，pyenv的原理是劫持环境变量</p><ol>
+<li>安装</li>
+</ol><ul>
+<li>下载pyenv</li>
+</ul><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/pyenv/pyenv.git ~/.pyenv</span><br></pre></td></tr></table></figure><ul>
+<li>配置环境变量（~/.bashrc）</li>
+</ul><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo 'export PYENV_ROOT="$HOME/.pyenv"' &gt;&gt; ~/.bash_profile</span><br><span class="line">echo 'export PATH="$PYENV_ROOT/bin:$PATH"' &gt;&gt; ~/.bash_profile</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+
+
+
+
+
+<ul>
+<li>添加pyenv初始化，实现命令自动补全</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo -e 'if command -v pyenv 1&gt;/dev/null 2&gt;&amp;1; then\n  eval "$(pyenv init -)"\nfi' &gt;&gt; ~/.bash_profile</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重启当前shell，使环境配置生效</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">exec "$SHELL"</span><br><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用</li>
+</ol>
+<ul>
+<li>查看有哪些python版本可以安装</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pyenv install --list</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>安装某个python版本</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pyenv install -v 3.6.6</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看当前python版本</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pyenv versions</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>切换python版本</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pyenv global 3.6.6</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>卸载某个python版本</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pyenv uninstall 3.6.6</span><br></pre></td></tr></table></figure>
+
+<h3 id="virtualenv安装与使用"><a href="#virtualenv安装与使用" class="headerlink" title="virtualenv安装与使用"></a>virtualenv安装与使用</h3><p>virtualenv用来创建一个完全隔离的python环境，各个工程的依赖相互隔离</p>
+<ol>
+<li>安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install virtualenv</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir myproject</span><br><span class="line">cd myproject</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用系统当前的python版本创建虚拟环境</span></span><br><span class="line">virtualenv venv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用指定python版本创建虚拟环境</span></span><br><span class="line">virtualenv -p ~/.pyenv/versions/3.6.6/bin/python venv</span><br><span class="line"><span class="meta">#</span><span class="bash"> 激活虚拟环境</span></span><br><span class="line">source venv/bin/activate</span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出虚拟环境</span></span><br><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+
+<h3 id="django安装与使用"><a href="#django安装与使用" class="headerlink" title="django安装与使用"></a>django安装与使用</h3><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">source venv/binactivate</span><br><span class="line">pip isntall django==2.1.7</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用</li>
+</ol>
+<ul>
+<li>创建django项目</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">django-admin startproject myproject</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>运行django项目</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd myproject</span><br><span class="line">python manage.py runserver</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>生成requirements.txt</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip freeze &gt; requirements.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用requirements.txt</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Django</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kafka常用操作记录</title>
+    <url>/2019/11/01/Kafka%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<blockquote>
+<p>记录kafka日常操作，持续更新。</p>
+</blockquote><h1 id="启动kafka"><a href="#启动kafka" class="headerlink" title="启动kafka"></a>启动kafka</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> /opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties &amp;</span></span><br><span class="line">或者（以守护进程的方式启动）：</span><br><span class="line"><span class="meta">#</span><span class="bash"> /opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/server.properties</span></span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<h1 id="kafka常用命令"><a href="#kafka常用命令" class="headerlink" title="kafka常用命令"></a>kafka常用命令</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cd /opt/kafka</span></span><br><span class="line">列出所有topic</span><br><span class="line"><span class="comment"># bin/kafka-topics.sh --zookeeper 192.168.98.53:2181 --list</span></span><br><span class="line">查看某个topic详情</span><br><span class="line"><span class="comment"># bin/kafka-topics.sh --zookeeper 192.168.98.53:2181 --describe --topic metric</span></span><br><span class="line">修改topic分区大小</span><br><span class="line"><span class="comment"># bin/kafka-topics.sh --zookeeper 192.168.98.53:2181 --alter --topic TransactionTopic --partitions 16</span></span><br><span class="line">查看所有groups</span><br><span class="line"><span class="comment"># bin/kafka-consumer-groups.sh --bootstrap-server 192.168.98.28:9092 --list</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>示例</strong>：列出集群里的所有主题</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /opt/kafka/bin/kafka-topics.sh --zookeeper localhost:2181 --list</span></span><br></pre></td></tr></table></figure>
+
+<p>怎么知道每个节点的信息呢？运行“”describe topics”命令就可以了</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /opt/kafka/bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic</span></span><br></pre></td></tr></table></figure>
+<p>下面解释一下这些输出。第一行是对所有分区的一个描述，然后每个分区都会对应一行，因为我们只有一个分区所以下面就只加了一行。<br>leader：负责处理消息的读和写，leader是从所有节点中随机选择的。<br>replicas：列出了所有的副本节点，不管节点是否在服务中。<br>isr：是正在服务中的节点。</p>
+<h2 id="查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据"><a href="#查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据" class="headerlink" title="查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据"></a>查看groups详情，这个是动态的，一般可以作为是否采集到数据判断依据</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># bin/kafka-consumer-groups.sh --bootstrap-server 192.168.98.28:9092 --describe --group hoa-server_event|column -t</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其中依次展示group名称、消费的topic名称、partition id、consumer group最后一次提交的offset、最后提交的生产消息offset、消费offset与生产offset之间的差值、当前消费topic-partition的group成员id(不一定包含hostname)</p>
+</blockquote>
+<h2 id="手动设置kafka-logs日志存储时间，删除积压topic数据"><a href="#手动设置kafka-logs日志存储时间，删除积压topic数据" class="headerlink" title="手动设置kafka-logs日志存储时间，删除积压topic数据"></a>手动设置kafka-logs日志存储时间，删除积压topic数据</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># kafka-configs.sh --zookeeper 192.168.98.53:2181 --alter --entity-name hoa-server --entity-type topics --add-config retention.ms=5000     //5s</span></span><br><span class="line"><span class="comment"># kafka-configs.sh --zookeeper 192.168.98.53:2181 --alter --entity-name hoa-server --entity-type topics --add-config retention.ms=604800000      //168h，恢复为配置文件中设置</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 –topics-with-overrides 参数可以找出所有包含覆盖配置的主题，它只会列出包含了与集群不一样配置的主题。<br>有两个参数可用于找出有问题的分区。使用 –under-replicated-partitions 参数可以列出所有包含不同步副本的分区 。 使用 –unavailable-partitions 参数可以列出所有没有首领的分区，这些分区已经处于离线状态，对于生产者和消费者来说是不可用的 。<br><strong>示例</strong> ：列出包含不同步副本的分区。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /opt/kafka/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --under-replicated-partitions</span></span><br><span class="line"><span class="comment"># /opt/kafka/bin/kafka-topics.sh --zookeeper localhost:2181 --describe --unavailable-partitions</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="重点概念"><a href="#重点概念" class="headerlink" title="重点概念"></a>重点概念</h1><h2 id="分区平衡"><a href="#分区平衡" class="headerlink" title="分区平衡"></a>分区平衡</h2><p>在讲分区平衡前，先讲几个概念：<br>AR： assigned replicas，已分配的副本。每个partition都有自己的AR列表，里面存储着这个partition最初分配的所有replica。注意AR列表不会变化，除非增加分区。<br>PR（优先replica）：AR列表中的第一个replica就是优先replica，而且永远是优先replica。最初，优先replica和leader replica是同一个replica。<br>ISR：in sync replicas，同步副本。每个partition都有自己的ISR列表。ISR是会根据同步情况动态变化的。</p>
+<p>最初ISR列表和AR列表是一致的，但由于某个节点死掉，或者某个节点的follower replica落后leader replica太多，那么该节点就会被从ISR列表中移除。此时，ISR和AR就不再一致。</p>
+]]></content>
+      <tags>
+        <tag>Kafka</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git常用指令</title>
+    <url>/2019/10/31/Git%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<blockquote>
+<p>整理一些自用的Git指令</p>
+</blockquote><h1 id="GitHub创建仓库提示代码"><a href="#GitHub创建仓库提示代码" class="headerlink" title="GitHub创建仓库提示代码"></a>GitHub创建仓库提示代码</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">"# 项目名"</span> &gt;&gt; README.md</span><br><span class="line">$ git init</span><br><span class="line">$ git add README.md</span><br><span class="line">$ git commit -m <span class="string">"first commit"</span></span><br><span class="line">$ git remote add origin git@github.com:invoker/项目名.git</span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<p>若仓库存在直接push</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git remote add origin git@github.com:invoker/test.git</span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<h1 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h1><h2 id="创建仓库（初始化）"><a href="#创建仓库（初始化）" class="headerlink" title="创建仓库（初始化）"></a>创建仓库（初始化）</h2><p>在当前指定目录下创建</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure>
+
+<p>新建一个仓库目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git init [project-name]</span><br></pre></td></tr></table></figure>
+
+<p>克隆一个远程项目</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> [url]</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加文件到缓存区"><a href="#添加文件到缓存区" class="headerlink" title="添加文件到缓存区"></a>添加文件到缓存区</h2><p>添加所有变化的文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git add .   or $ git add -A</span><br></pre></td></tr></table></figure>
+
+<p>添加名称指定文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git add text.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>设置提交代码时的用户信息</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config [--global] user.name <span class="string">"[name]"</span></span><br><span class="line">$ git config [--global] user.email <span class="string">"[email address]"</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h2><p>提交暂存区到仓库区</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git commit -m <span class="string">"msg"</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="提交暂存区的指定文件到仓库区"><a href="#提交暂存区的指定文件到仓库区" class="headerlink" title="提交暂存区的指定文件到仓库区"></a>提交暂存区的指定文件到仓库区</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git commit [file1] [file2] ... -m [message]</span><br></pre></td></tr></table></figure>
+
+<h2 id="提交工作区自上次commit之后的变化，直接到仓库区"><a href="#提交工作区自上次commit之后的变化，直接到仓库区" class="headerlink" title="提交工作区自上次commit之后的变化，直接到仓库区"></a>提交工作区自上次commit之后的变化，直接到仓库区</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git commit -a</span><br></pre></td></tr></table></figure>
+
+<h2 id="提交时显示所有diff信息"><a href="#提交时显示所有diff信息" class="headerlink" title="提交时显示所有diff信息"></a>提交时显示所有diff信息</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git commit -v</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用一次新的commit，替代上一次提交"><a href="#使用一次新的commit，替代上一次提交" class="headerlink" title="使用一次新的commit，替代上一次提交"></a>使用一次新的commit，替代上一次提交</h2><blockquote>
+<p>如果代码没有任何新变化，则用来改写上一次commit的提交信息</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git commit --amend -m [message]</span><br></pre></td></tr></table></figure>
+
+<h2 id="重做上一次commit，并包括指定文件的新变化"><a href="#重做上一次commit，并包括指定文件的新变化" class="headerlink" title="重做上一次commit，并包括指定文件的新变化"></a>重做上一次commit，并包括指定文件的新变化</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git commit --amend [file1] [file2] ...</span><br></pre></td></tr></table></figure>
+
+<h1 id="远程同步"><a href="#远程同步" class="headerlink" title="远程同步"></a>远程同步</h1><h2 id="下载远程仓库的所有变动"><a href="#下载远程仓库的所有变动" class="headerlink" title="下载远程仓库的所有变动"></a>下载远程仓库的所有变动</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git fetch [remote]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示所有远程仓库"><a href="#显示所有远程仓库" class="headerlink" title="显示所有远程仓库"></a>显示所有远程仓库</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git remote -v</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某个远程仓库的信息"><a href="#显示某个远程仓库的信息" class="headerlink" title="显示某个远程仓库的信息"></a>显示某个远程仓库的信息</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git remote show [remote]</span><br></pre></td></tr></table></figure>
+
+<h2 id="增加一个新的远程仓库，并命名"><a href="#增加一个新的远程仓库，并命名" class="headerlink" title="增加一个新的远程仓库，并命名"></a>增加一个新的远程仓库，并命名</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git remote add [shortname] [url]</span><br></pre></td></tr></table></figure>
+
+<h2 id="取回远程仓库的变化，并与本地分支合并"><a href="#取回远程仓库的变化，并与本地分支合并" class="headerlink" title="取回远程仓库的变化，并与本地分支合并"></a>取回远程仓库的变化，并与本地分支合并</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git pull [remote] [branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="上传本地指定分支到远程仓库"><a href="#上传本地指定分支到远程仓库" class="headerlink" title="上传本地指定分支到远程仓库"></a>上传本地指定分支到远程仓库</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push [remote] [branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="强行推送当前分支到远程仓库，即使有冲突"><a href="#强行推送当前分支到远程仓库，即使有冲突" class="headerlink" title="强行推送当前分支到远程仓库，即使有冲突"></a>强行推送当前分支到远程仓库，即使有冲突</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push [remote] --force</span><br></pre></td></tr></table></figure>
+
+<h2 id="推送所有分支到远程仓库"><a href="#推送所有分支到远程仓库" class="headerlink" title="推送所有分支到远程仓库"></a>推送所有分支到远程仓库</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push [remote] --all</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h1><h2 id="列出所有本地分支"><a href="#列出所有本地分支" class="headerlink" title="列出所有本地分支"></a>列出所有本地分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch</span><br></pre></td></tr></table></figure>
+
+<h2 id="列出所有远程分支"><a href="#列出所有远程分支" class="headerlink" title="列出所有远程分支"></a>列出所有远程分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -r</span><br></pre></td></tr></table></figure>
+
+<h2 id="列出所有本地分支和远程分支"><a href="#列出所有本地分支和远程分支" class="headerlink" title="列出所有本地分支和远程分支"></a>列出所有本地分支和远程分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -a</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个分支，但依然停留在当前分支"><a href="#新建一个分支，但依然停留在当前分支" class="headerlink" title="新建一个分支，但依然停留在当前分支"></a>新建一个分支，但依然停留在当前分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch [branch-name]</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个分支，并切换到该分支"><a href="#新建一个分支，并切换到该分支" class="headerlink" title="新建一个分支，并切换到该分支"></a>新建一个分支，并切换到该分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout -b [branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个分支，指向指定commit"><a href="#新建一个分支，指向指定commit" class="headerlink" title="新建一个分支，指向指定commit"></a>新建一个分支，指向指定commit</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch [branch] [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个分支，与指定的远程分支建立追踪关系"><a href="#新建一个分支，与指定的远程分支建立追踪关系" class="headerlink" title="新建一个分支，与指定的远程分支建立追踪关系"></a>新建一个分支，与指定的远程分支建立追踪关系</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch --track [branch] [remote-branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="切换到指定分支，并更新工作区"><a href="#切换到指定分支，并更新工作区" class="headerlink" title="切换到指定分支，并更新工作区"></a>切换到指定分支，并更新工作区</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout [branch-name]</span><br></pre></td></tr></table></figure>
+
+<h2 id="切换到上一个分支"><a href="#切换到上一个分支" class="headerlink" title="切换到上一个分支"></a>切换到上一个分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout -</span><br></pre></td></tr></table></figure>
+
+<h2 id="建立追踪关系，在现有分支与指定的远程分支之间"><a href="#建立追踪关系，在现有分支与指定的远程分支之间" class="headerlink" title="建立追踪关系，在现有分支与指定的远程分支之间"></a>建立追踪关系，在现有分支与指定的远程分支之间</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch --<span class="built_in">set</span>-upstream [branch] [remote-branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="合并指定分支到当前分支"><a href="#合并指定分支到当前分支" class="headerlink" title="合并指定分支到当前分支"></a>合并指定分支到当前分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git merge [branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="选择一个commit，合并进当前分支"><a href="#选择一个commit，合并进当前分支" class="headerlink" title="选择一个commit，合并进当前分支"></a>选择一个commit，合并进当前分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git cherry-pick [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -d [branch-name]</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除远程分支"><a href="#删除远程分支" class="headerlink" title="删除远程分支"></a>删除远程分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin --delete [branch-name]</span><br><span class="line">$ git branch -dr [remote/branch]</span><br></pre></td></tr></table></figure>
+
+<h1 id="标签Tags"><a href="#标签Tags" class="headerlink" title="标签Tags"></a>标签Tags</h1><p>添加标签 在当前commit</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git tag -a v1.0 -m <span class="string">'xxx'</span></span><br></pre></td></tr></table></figure>
+
+<p>添加标签 在指定commit</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git tag v1.0 [commit]</span><br></pre></td></tr></table></figure>
+
+<p>查看</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git tag</span><br></pre></td></tr></table></figure>
+
+<p>删除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git tag -d V1.0</span><br></pre></td></tr></table></figure>
+
+<p>删除远程tag</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin :refs/tags/[tagName]</span><br></pre></td></tr></table></figure>
+
+<p>推送</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin --tags</span><br></pre></td></tr></table></figure>
+
+<p>拉取</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git fetch origin tag V1.0</span><br></pre></td></tr></table></figure>
+
+<p>新建一个分支，指向某个tag</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout -b [branch] [tag]</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看信息"><a href="#查看信息" class="headerlink" title="查看信息"></a>查看信息</h1><h2 id="显示有变更的文件"><a href="#显示有变更的文件" class="headerlink" title="显示有变更的文件"></a>显示有变更的文件</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git status</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示当前分支的版本历史"><a href="#显示当前分支的版本历史" class="headerlink" title="显示当前分支的版本历史"></a>显示当前分支的版本历史</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="显示commit历史，以及每次commit发生变更的文件"><a href="#显示commit历史，以及每次commit发生变更的文件" class="headerlink" title="显示commit历史，以及每次commit发生变更的文件"></a>显示commit历史，以及每次commit发生变更的文件</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --<span class="built_in">stat</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="搜索提交历史，根据关键词"><a href="#搜索提交历史，根据关键词" class="headerlink" title="搜索提交历史，根据关键词"></a>搜索提交历史，根据关键词</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> -S [keyword]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某个commit之后的所有变动，每个commit占据一行"><a href="#显示某个commit之后的所有变动，每个commit占据一行" class="headerlink" title="显示某个commit之后的所有变动，每个commit占据一行"></a>显示某个commit之后的所有变动，每个commit占据一行</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> [tag] HEAD --pretty=format:%s</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件"><a href="#显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件" class="headerlink" title="显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件"></a>显示某个commit之后的所有变动，其”提交说明”必须符合搜索条件</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> [tag] HEAD --grep feature</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某个文件的版本历史，包括文件改名"><a href="#显示某个文件的版本历史，包括文件改名" class="headerlink" title="显示某个文件的版本历史，包括文件改名"></a>显示某个文件的版本历史，包括文件改名</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --follow [file]</span><br><span class="line">$ git whatchanged [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示指定文件相关的每一次diff"><a href="#显示指定文件相关的每一次diff" class="headerlink" title="显示指定文件相关的每一次diff"></a>显示指定文件相关的每一次diff</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> -p [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示过去5次提交"><a href="#显示过去5次提交" class="headerlink" title="显示过去5次提交"></a>显示过去5次提交</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> -5 --pretty --oneline</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示所有提交过的用户，按提交次数排序"><a href="#显示所有提交过的用户，按提交次数排序" class="headerlink" title="显示所有提交过的用户，按提交次数排序"></a>显示所有提交过的用户，按提交次数排序</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git shortlog -sn</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示指定文件是什么人在什么时间修改过"><a href="#显示指定文件是什么人在什么时间修改过" class="headerlink" title="显示指定文件是什么人在什么时间修改过"></a>显示指定文件是什么人在什么时间修改过</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git blame [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示暂存区和工作区的差异"><a href="#显示暂存区和工作区的差异" class="headerlink" title="显示暂存区和工作区的差异"></a>显示暂存区和工作区的差异</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git diff</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示暂存区和上一个commit的差异"><a href="#显示暂存区和上一个commit的差异" class="headerlink" title="显示暂存区和上一个commit的差异"></a>显示暂存区和上一个commit的差异</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git diff --cached [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示工作区与当前分支最新commit之间的差异"><a href="#显示工作区与当前分支最新commit之间的差异" class="headerlink" title="显示工作区与当前分支最新commit之间的差异"></a>显示工作区与当前分支最新commit之间的差异</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git diff HEAD</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示两次提交之间的差异"><a href="#显示两次提交之间的差异" class="headerlink" title="显示两次提交之间的差异"></a>显示两次提交之间的差异</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git diff [first-branch]...[second-branch]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示今天你写了多少行代码"><a href="#显示今天你写了多少行代码" class="headerlink" title="显示今天你写了多少行代码"></a>显示今天你写了多少行代码</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git diff --shortstat <span class="string">"@&#123;0 day ago&#125;"</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某次提交的元数据和内容变化"><a href="#显示某次提交的元数据和内容变化" class="headerlink" title="显示某次提交的元数据和内容变化"></a>显示某次提交的元数据和内容变化</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git show [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某次提交发生变化的文件"><a href="#显示某次提交发生变化的文件" class="headerlink" title="显示某次提交发生变化的文件"></a>显示某次提交发生变化的文件</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git show --name-only [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示某次提交时，某个文件的内容"><a href="#显示某次提交时，某个文件的内容" class="headerlink" title="显示某次提交时，某个文件的内容"></a>显示某次提交时，某个文件的内容</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git show [commit]:[filename]</span><br></pre></td></tr></table></figure>
+
+<h2 id="显示当前分支的最近几次提交"><a href="#显示当前分支的最近几次提交" class="headerlink" title="显示当前分支的最近几次提交"></a>显示当前分支的最近几次提交</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git reflog</span><br></pre></td></tr></table></figure>
+
+<h1 id="撤销"><a href="#撤销" class="headerlink" title="撤销"></a>撤销</h1><h2 id="恢复暂存区的指定文件到工作区"><a href="#恢复暂存区的指定文件到工作区" class="headerlink" title="恢复暂存区的指定文件到工作区"></a>恢复暂存区的指定文件到工作区</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="恢复某个commit的指定文件到暂存区和工作区"><a href="#恢复某个commit的指定文件到暂存区和工作区" class="headerlink" title="恢复某个commit的指定文件到暂存区和工作区"></a>恢复某个commit的指定文件到暂存区和工作区</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout [commit] [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="恢复暂存区的所有文件到工作区"><a href="#恢复暂存区的所有文件到工作区" class="headerlink" title="恢复暂存区的所有文件到工作区"></a>恢复暂存区的所有文件到工作区</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout .</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置暂存区的指定文件，与上一次commit保持一致，但工作区不变"><a href="#重置暂存区的指定文件，与上一次commit保持一致，但工作区不变" class="headerlink" title="重置暂存区的指定文件，与上一次commit保持一致，但工作区不变"></a>重置暂存区的指定文件，与上一次commit保持一致，但工作区不变</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git reset [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置暂存区与工作区，与上一次commit保持一致"><a href="#重置暂存区与工作区，与上一次commit保持一致" class="headerlink" title="重置暂存区与工作区，与上一次commit保持一致"></a>重置暂存区与工作区，与上一次commit保持一致</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git reset --hard</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变"><a href="#重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变" class="headerlink" title="重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变"></a>重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git reset [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致"><a href="#重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致" class="headerlink" title="重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致"></a>重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git reset --hard [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="重置当前HEAD为指定commit，但保持暂存区和工作区不变"><a href="#重置当前HEAD为指定commit，但保持暂存区和工作区不变" class="headerlink" title="重置当前HEAD为指定commit，但保持暂存区和工作区不变"></a>重置当前HEAD为指定commit，但保持暂存区和工作区不变</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git reset --keep [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建一个commit，用来撤销指定commit"><a href="#新建一个commit，用来撤销指定commit" class="headerlink" title="新建一个commit，用来撤销指定commit"></a>新建一个commit，用来撤销指定commit</h2><blockquote>
+<p>后者的所有变化都将被前者抵消，并且应用到当前分支</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git revert [commit]</span><br></pre></td></tr></table></figure>
+
+<h2 id="暂时将未提交的变化移除，稍后再移入"><a href="#暂时将未提交的变化移除，稍后再移入" class="headerlink" title="暂时将未提交的变化移除，稍后再移入"></a>暂时将未提交的变化移除，稍后再移入</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git stash</span><br><span class="line">$ git stash pop</span><br></pre></td></tr></table></figure>
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="生成一个可供发布的压缩包"><a href="#生成一个可供发布的压缩包" class="headerlink" title="生成一个可供发布的压缩包"></a>生成一个可供发布的压缩包</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git archives</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2019/10/30/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><a id="more"></a>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+  </entry>
+</search>
